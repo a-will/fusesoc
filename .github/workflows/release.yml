@@ -1,0 +1,28 @@
+name: Release Python Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.x"
+    - name: Install build dependency with pip
+      run: python3 -m pip install build
+    - name: Build the wheel
+      run: python3 -m build
+    - name: Upload the package
+      uses: actions/upload-artifact@v4
+      with:
+        name: fusesoc
+        path: dist/
